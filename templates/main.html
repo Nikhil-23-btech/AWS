@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Joan&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Joan', serif;
+    }
+
+    a {
+      text-decoration: none;
+      color: #adadad;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: .5rem 1rem;
+      background-color: #cd8c38;
+      border-radius: 2rem;
+      color: #1e1f26;
+      transition: .3s;
+    }
+
+    .btn:hover {
+      background-color: #92601f;
+    }
+
+    .btn-l {
+      width: 100%;
+      text-align: center;
+    }
+
+    body {
+      background-color: #1e1f26;
+      display: grid;
+      grid-template-columns: 1000px;
+      justify-content: space-evenly;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 1rem;
+    }
+
+    .left-content,
+    .right-content {
+      display: flex;
+      align-items: center;
+    }
+
+    .title {
+      margin-right: 3rem;
+      color: #cd8c38;
+    }
+
+    .navigation {
+      display: flex;
+      list-style: none;
+    }
+
+    .navigation li {
+      margin-right: 1rem;
+    }
+
+    .navigation li a:hover {
+      color: #cd8c38;
+    }
+
+    .active {
+      color: #cd8c38;
+    }
+
+    .profile-img-box {
+      position: relative;
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .main-container {
+      color: #adadad;
+      display: block;
+    }
+
+    .movies-container {
+      padding-bottom: 2rem;
+    }
+
+    .current-movies {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .current-movie {
+      background: linear-gradient(45deg, rgba(255, 255, 255, .05), rgba(205, 140, 56, .15));
+      padding: 1rem;
+      border-radius: .5rem;
+    }
+
+    .cm-img-box {
+      position: relative;
+      height: 150px;
+      width: auto;
+      margin-bottom: 1rem;
+      border-radius: .5rem;
+      overflow: hidden;
+    }
+
+    .movie-title {
+      color: #fff;
+      margin-bottom: .2rem;
+    }
+
+    .booking {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 1rem;
+    }
+
+    .price {
+      color: #cd8c38;
+    }
+  </style>
+</head>
+
+<body>
+  <section class="top-bar">
+    <div class="left-content">
+      <h2 class="title">M4You</h2>
+      <ul class="navigation">
+        <li><a href="#">Home</a></li>
+        <li><a class="active" href="#">Movies</a></li>
+      </ul>
+    </div>
+    <div class="right-content">
+      <div class="profile-img-box">
+        <img src="./assets/images/profile.jpg" alt="">
+      </div>
+    </div>
+  </section>
+
+  <section class="main-container">
+    <div class="movies-container">
+      <div class="current-movies">
+        <div class="current-movie">
+          <div class="cm-img-box">
+            <img src="{{ url_for('static', filename='images/jurassic.jpg') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">Jurassic World</h3>
+          <p class="screen-name">Screen : Platinum</p>
+          <div class="booking">
+            <h2 class="price">15$</h2>
+            <a href="{{ url_for('booking_page', movie='Jurassic World') }}" class="btn">Buy Tickets</a>
+          </div>
+        </div>
+
+        <div class="current-movie">
+          <div class="cm-img-box">
+            <img src="{{ url_for('static', filename='images/vikram.jpg') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">Vikram</h3>
+          <p class="screen-name">Screen : Gold</p>
+          <div class="booking">
+            <h2 class="price">10$</h2>
+            <a href="{{ url_for('booking_page', movie='Vikram') }}" class="btn">Buy Tickets</a>
+          </div>
+        </div>
+
+        <div class="current-movie">
+          <div class="cm-img-box">
+          <img src="{{ url_for('static', filename='images/firestarter.jpg') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">Firestarter</h3>
+          <p class="screen-name">Screen : Silver</p>
+          <div class="booking">
+            <h2 class="price">5$</h2>
+            <a href="{{ url_for('booking_page', movie='Firestarter') }}" class="btn">Buy Tickets</a>
+          </div>
+        </div>
+
+        <div class="current-movie">
+          <div class="cm-img-box">
+          <img src="{{ url_for('static', filename='images/salaar.webp') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">Salaar</h3>
+          <p class="screen-name">Screen : Platinum</p>
+          <div class="booking">
+            <h2 class="price">5$</h2>
+            <a href="{{ url_for('booking_page', movie='Salaar') }}" class="btn">Buy Tickets</a>
+          </div>
+        </div>
+
+        <div class="current-movie">
+          <div class="cm-img-box">
+          <img src="{{ url_for('static', filename='images/mad.jpg') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">MAD Square</h3>
+          <p class="screen-name">Screen : Silver</p>
+          <div class="booking">
+            <h2 class="price">5$</h2>
+            <a href="{{ url_for('booking_page', movie='MAD Square') }}" class="btn">Buy Tickets</a>
+          </div>
+        </div>
+
+        <div class="current-movie">
+          <div class="cm-img-box">
+          <img src="{{ url_for('static', filename='images/kubera.webp') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">Kubera</h3>
+          <p class="screen-name">Screen : Silver</p>
+          <div class="booking">
+            <h2 class="price">5$</h2>
+            <a href="{{ url_for('booking_page', movie='Kubera') }}" class="btn">Buy Tickets</a>
+          </div>
+        </div>
+
+        <div class="current-movie">
+          <div class="cm-img-box">
+          <img src="{{ url_for('static', filename='images/toy.jpg') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">Toy Story-3</h3>
+          <p class="screen-name">Screen : Silver</p>
+          <div class="booking">
+            <h2 class="price">5$</h2>
+            <a href="{{ url_for('booking_page', movie='Toy Story-3') }}" class="btn">Buy Tickets</a>
+          </div>
+        </div>
+
+        <div class="current-movie">
+          <div class="cm-img-box">
+          <img src="{{ url_for('static', filename='images/fast.jpg') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">Fast and Furious-8</h3>
+          <p class="screen-name">Screen : Silver</p>
+          <div class="booking">
+            <h2 class="price">5$</h2>
+            <a href="{{ url_for('booking_page', movie='Fast and Furious-8') }}" class="btn">Buy Tickets</a>
+          </div>
+
+        </div>
+        <div class="current-movie">
+          <div class="cm-img-box">
+          <img src="{{ url_for('static', filename='images/jawan.jpg') }}" alt="">
+
+          </div>
+          <h3 class="movie-title">Jawan</h3>
+          <p class="screen-name">Screen : Silver</p>
+          <div class="booking">
+            <h2 class="price">5$</h2>
+            <a href="{{ url_for('booking_page', movie='Jawan') }}" class="btn">Buy Tickets</a>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</body>
+
+</html>

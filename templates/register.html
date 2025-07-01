@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Register | M4You</title>
+  <link href="https://fonts.googleapis.com/css2?family=Joan&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1e1f26;
+      color: #adadad;
+      font-family: 'Joan', serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      color: #cd8c38;
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 1rem;
+      backdrop-filter: blur(5px);
+      width: 300px;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.7rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 0.5rem;
+      background-color: #333;
+      color: #fff;
+    }
+
+    input:focus {
+      outline: 2px solid #cd8c38;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 0.7rem;
+      background-color: #cd8c38;
+      color: #1e1f26;
+      border-radius: 2rem;
+      border: none;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #92601f;
+    }
+
+    .link {
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .link a {
+      color: #cd8c38;
+      text-decoration: none;
+    }
+
+    .link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Register for M4You</h1>
+<form action="/register" method="POST">
+  <input type="text" name="fname" placeholder="First Name" required />
+  <input type="text" name="lname" placeholder="Last Name" required />
+  <input type="email" name="email" placeholder="Email" required />
+  <input type="password" name="setPwd" placeholder="Password" required />
+  <input type="password" name="confirmPwd" placeholder="Confirm Password" required />
+  
+  <button class="btn" type="submit">Register</button>
+  
+  <div class="link">
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+  </div>
+</form>
+
+
+</body>
+
+</html>

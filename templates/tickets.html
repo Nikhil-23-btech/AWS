@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ticket Confirmation</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Joan&display=swap');
+
+    body {
+      background-color: #1e1f26;
+      color: white;
+      font-family: 'Joan', serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .ticket-box {
+      background: linear-gradient(45deg, rgba(255, 255, 255, .05), rgba(205, 140, 56, .15));
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 0 15px rgba(205, 140, 56, 0.3);
+      max-width: 400px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #cd8c38;
+      margin-bottom: 1rem;
+    }
+
+    .details {
+      text-align: left;
+      margin-top: 1.5rem;
+    }
+
+    .details p {
+      margin: 0.4rem 0;
+    }
+
+    .btn {
+      margin-top: 2rem;
+      display: inline-block;
+      padding: 0.5rem 1.2rem;
+      background-color: #cd8c38;
+      color: #1e1f26;
+      border-radius: 2rem;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background-color: #92601f;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ticket-box">
+    <h1>🎟️ Ticket Booked!</h1>
+    <div class="details">
+      <p><strong>Movie:</strong> {{ booking.Movie }}</p>
+      <p><strong>Date:</strong> {{ booking.Date }}</p>
+      <p><strong>Time:</strong> {{ booking.Time }}</p>
+      <p><strong>Seat(s):</strong> {{ booking.Seat }}</p>
+      <p><strong>Booking ID:</strong> {{ booking.BookingID }}</p>
+    </div>
+    <a href="/main" class="btn">Back to Movies</a>
+  </div>
+
+</body>
+</html>

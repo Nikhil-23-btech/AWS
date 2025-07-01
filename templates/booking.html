@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Tickets</title>
+  <style>
+    body {
+      background-color: #1e1f26;
+      color: white;
+      font-family: 'Joan', serif;
+      padding: 2rem;
+    }
+
+    h1 {
+      color: #cd8c38;
+    }
+
+    h2 {
+      margin-top: 2rem;
+      color: #cd8c38;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .seats {
+      display: grid;
+      grid-template-columns: repeat(9, 1fr);
+      gap: 10px;
+      margin: 1rem 0;
+    }
+
+    .seat {
+      width: 40px;
+      height: 40px;
+      background-color: #444;
+      border-radius: 5px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .seat.selected {
+      background-color: #cd8c38;
+    }
+
+    .seat.booked {
+      background-color: #b30000;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: .5rem 1rem;
+      background-color: #cd8c38;
+      border-radius: 2rem;
+      color: #1e1f26;
+      text-decoration: none;
+      border: none;
+      transition: 0.3s;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: #92601f;
+    }
+
+    input, select {
+      padding: 0.5rem;
+      border-radius: 5px;
+      border: none;
+      font-size: 1rem;
+    }
+
+    .category {
+      margin-bottom: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Booking for: {{ movie }}</h1>
+
+<form method="POST" action="{{ url_for('book_ticket') }}" onsubmit="return collectSeats()">
+
+  <input type="hidden" name="movie" value="{{ movie }}">
+
+  <label for="date">Select Date:</label>
+  <input type="date" name="date" required>
+
+  <label for="time">Select Time:</label>
+  <select name="time" required>
+    <option value="10:00 AM">10:00 AM</option>
+    <option value="01:00 PM">01:00 PM</option>
+    <option value="04:00 PM">04:00 PM</option>
+    <option value="07:00 PM">07:00 PM</option>
+  </select>
+
+  <label>Select Seats:</label>
+
+  <div class="category">
+    <h2>Platinum</h2>
+    <div class="seats" id="platinumSeats"></div>
+  </div>
+
+  <div class="category">
+    <h2>Gold</h2>
+    <div class="seats" id="goldSeats"></div>
+  </div>
+
+  <div class="category">
+    <h2>Silver</h2>
+    <div class="seats" id="silverSeats"></div>
+  </div>
+
+  <input type="hidden" name="seat" id="selectedSeatsInput">
+
+  <p id="selectedCount">Selected: 0 seat(s)</p>
+  <button type="submit" class="btn">Confirm Booking</button>
+</form>
+
+<script>
+  const selectedSeats = new Set();
+  const selectedSeatsInput = document.getElementById("selectedSeatsInput");
+  const selectedCount = document.getElementById("selectedCount");
+
+  // Booked seats from Flask context
+  const bookedSeats = {{ booked_seats|tojson }};
+
+  function createSeats(start, end, container, category) {
+    for (let i = start; i <= end; i++) {
+      const seat = document.createElement("div");
+      seat.classList.add("seat");
+      seat.textContent = i;
+      const seatKey = `${i} (${category})`;
+      seat.dataset.seatKey = seatKey;
+
+      if (bookedSeats.includes(seatKey)) {
+        seat.classList.add("booked");
+      } else {
+        seat.onclick = () => {
+          if (selectedSeats.has(seatKey)) {
+            selectedSeats.delete(seatKey);
+            seat.classList.remove("selected");
+          } else {
+            selectedSeats.add(seatKey);
+            seat.classList.add("selected");
+          }
+          selectedCount.textContent = `Selected: ${selectedSeats.size} seat(s)`;
+        };
+      }
+
+      container.appendChild(seat);
+    }
+  }
+
+  createSeats(1, 45, document.getElementById("platinumSeats"), "Platinum");
+  createSeats(1, 45, document.getElementById("goldSeats"), "Gold");
+  createSeats(1, 45, document.getElementById("silverSeats"), "Silver");
+
+  function collectSeats() {
+    if (selectedSeats.size === 0) {
+      alert("Please select at least one seat.");
+      return false;
+    }
+    selectedSeatsInput.value = [...selectedSeats].join(", ");
+    return true;
+  }
+</script>
+
+</body>
+</html>
