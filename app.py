@@ -8,11 +8,11 @@ app = Flask(__name__)
 
 
 # AWS DynamoDB and SNS setup
-dynamodb = boto3.resource('dynamodb', region_name='us-east-1')  # Replace with your AWS region
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1c')  # Replace with your AWS region
 users_table = dynamodb.Table('userdata')
 bookings_table = dynamodb.Table('Bookingdata')
 
-sns = boto3.client('sns', region_name='us-east-1')
+sns = boto3.client('sns', region_name='us-east-1c')
 sns_topic_arn = 'arn:aws:sns:us-east-1:195275652542:BookingRequestNotifications'  # Replace with your SNS topic ARN
 
 # Send email via AWS SNS
