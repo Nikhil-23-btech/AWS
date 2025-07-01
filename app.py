@@ -5,10 +5,10 @@ import os
 
 # Flask setup
 app = Flask(__name__)
-app.secret_key = "b7127b5f7f99f682c84375c6e5cf4fa80734d4d790372f4ae3926a6b6f8c3c6f"  # ✅ Generated secure key
+app.secret_key = "b7127b5f7f99f682c84375c6e5cf4fa80734d4d790372f4ae3926a6b6f8c3c6f"
 
-# AWS Setup
-REGION = 'us-east-1'  # ✅ Correct region (not availability zone)
+# AWS setup
+REGION = 'us-east-1'
 dynamodb = boto3.resource('dynamodb', region_name=REGION)
 users_table = dynamodb.Table('userdata')
 bookings_table = dynamodb.Table('Bookingdata')
@@ -16,7 +16,7 @@ bookings_table = dynamodb.Table('Bookingdata')
 sns = boto3.client('sns', region_name=REGION)
 sns_topic_arn = 'arn:aws:sns:us-east-1:195275652542:BookingRequestNotifications'
 
-# Send booking confirmation email via AWS SNS
+# Send email via AWS SNS
 def send_booking_email(email, movie, date, time, seat, booking_id):
     message = f"""
     🎟️ Booking Confirmed!
@@ -138,7 +138,7 @@ def book_ticket():
         return redirect(url_for('login'))
 
     data = {
-        'Email': session['user'],
+        'email': session['user'],  # ✅ FIXED
         'Movie': request.form['movie'],
         'Date': request.form['date'],
         'Time': request.form['time'],
@@ -148,9 +148,12 @@ def book_ticket():
 
     try:
         bookings_table.put_item(Item=data)
+
+        # ✅ Send SNS email notification
         send_booking_email(
-            data['Email'], data['Movie'], data['Date'], data['Time'], data['Seat'], data['BookingID']
+            data['email'], data['Movie'], data['Date'], data['Time'], data['Seat'], data['BookingID']
         )
+
         return render_template('tickets.html', booking=data)
     except Exception as e:
         print("Booking error:", e)
@@ -159,4 +162,4 @@ def book_ticket():
 
 # Run the app
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)  # ✅ Use port 5000 to avoid permission issues
+    app.run(host='0.0.0.0', port=5000, debug=True)
