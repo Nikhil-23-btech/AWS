@@ -1,21 +1,22 @@
 from flask import Flask, request, render_template, redirect, url_for, session, flash
+from werkzeug.security import generate_password_hash, check_password_hash
 import boto3
 import uuid
 import os
 
 # Flask setup
 app = Flask(__name__)
-
+app.secret_key = os.getenv("FLASK_SECRET_KEY", "supersecretkey123")  # Use environment variable in production
 
 # AWS DynamoDB and SNS setup
-dynamodb = boto3.resource('dynamodb', region_name='us-east-1c')  # Replace with your AWS region
+dynamodb = boto3.resource('dynamodb', region_name='us-east-1')  # ✅ Correct region
 users_table = dynamodb.Table('userdata')
 bookings_table = dynamodb.Table('Bookingdata')
 
-sns = boto3.client('sns', region_name='us-east-1c')
-sns_topic_arn = 'arn:aws:sns:us-east-1:195275652542:BookingRequestNotifications'  # Replace with your SNS topic ARN
+sns = boto3.client('sns', region_name='us-east-1')  # ✅ Correct region
+sns_topic_arn = 'arn:aws:sns:us-east-1:195275652542:BookingRequestNotifications'
 
-# Send email via AWS SNS
+# Function to send booking confirmation email via AWS SNS
 def send_booking_email(email, movie, date, time, seat, booking_id):
     message = f"""
     🎟️ Booking Confirmed!
@@ -54,32 +55,36 @@ def register():
         confirm_password = request.form.get('confirmPwd')
 
         if not all([fname, lname, email, password, confirm_password]):
-            return "All fields are required.", 400
+            flash("All fields are required.")
+            return redirect(url_for('register'))
 
         if password != confirm_password:
-            return "Passwords do not match.", 400
+            flash("Passwords do not match.")
+            return redirect(url_for('register'))
 
-        # Check if user already exists
         try:
             existing = users_table.get_item(Key={"email": email}).get("Item")
             if existing:
-                return "User already registered.", 400
+                flash("User already registered.")
+                return redirect(url_for('register'))
         except Exception as e:
             print("Error checking user:", e)
-            return "Database error", 500
+            flash("Database error.")
+            return redirect(url_for('register'))
 
-        # Insert user
         try:
             users_table.put_item(Item={
                 "first_name": fname,
                 "last_name": lname,
                 "email": email,
-                "password": password
+                "password": generate_password_hash(password)  # ✅ Secure hashing
             })
+            flash("Registration successful. Please login.")
             return redirect(url_for('index'))
         except Exception as e:
             print("Error inserting user:", e)
-            return "Registration failed", 500
+            flash("Registration failed.")
+            return redirect(url_for('register'))
 
     return render_template('register.html')
 
@@ -91,7 +96,7 @@ def login():
 
         try:
             user = users_table.get_item(Key={"email": email}).get("Item")
-            if user and user['password'] == password:
+            if user and check_password_hash(user['password'], password):  # ✅ Secure check
                 session['user'] = email
                 return redirect(url_for('main'))
         except Exception as e:
@@ -133,7 +138,6 @@ def booking_page():
 
     return render_template('booking.html', movie=movie, booked_seats=booked_seats)
 
-
 @app.route('/book', methods=['POST'])
 def book_ticket():
     if 'user' not in session:
@@ -161,4 +165,4 @@ def book_ticket():
 
 # Run the app
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=80, debug=True)
+    app.run(host='0.0.0.0', port=80, debug=True)  # Accessible via EC2 public IP
